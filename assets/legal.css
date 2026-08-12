@@ -1,0 +1,44 @@
+:root{
+  --bg:#08090C; --surface:#111319; --line:#22262F;
+  --text:#E9EDF3; --muted:#828C9E; --blue:#3D82E8; --green:#00C076;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,sans-serif;
+  line-height:1.7; font-size:16px;
+}
+a{color:var(--blue)}
+.wrap{max-width:760px;margin:0 auto;padding:0 24px}
+
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+    background:rgba(8,9,12,.78);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:18px;
+       letter-spacing:-.3px;color:var(--text);text-decoration:none}
+.brand img{width:28px;height:28px;border-radius:8px}
+.nav-in .back{margin-left:auto;color:var(--muted);font-size:14.5px;text-decoration:none}
+.nav-in .back:hover{color:var(--text)}
+
+header.page{padding:60px 0 30px;border-bottom:1px solid var(--line)}
+header.page h1{font-size:clamp(30px,5vw,44px);letter-spacing:-1.4px;line-height:1.1;font-weight:780}
+header.page .upd{color:var(--muted);font-size:14px;margin-top:12px}
+
+main{padding:44px 0 90px}
+main h2{font-size:21px;letter-spacing:-.5px;font-weight:700;margin:42px 0 12px}
+main h2:first-child{margin-top:0}
+main h3{font-size:16.5px;font-weight:670;margin:24px 0 8px}
+main p{color:#C3CAD6;margin-bottom:14px}
+main ul{margin:0 0 16px 22px;color:#C3CAD6}
+main li{margin-bottom:9px}
+main strong{color:var(--text);font-weight:640}
+
+.callout{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--green);
+         border-radius:12px;padding:18px 20px;margin:22px 0}
+.callout.warn{border-left-color:#FF4D6A}
+.callout p:last-child{margin-bottom:0}
+
+footer{border-top:1px solid var(--line);padding:34px 0 60px;color:var(--muted);font-size:14px}
+footer a{color:var(--muted)}
+footer a:hover{color:var(--text)}
+.f-links{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px}

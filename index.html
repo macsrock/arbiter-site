@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arbiter — Arbitrum wallet with perps built in</title>
+<meta name="description" content="A self-custody Arbitrum wallet with Hyperliquid perpetuals built in. Hold your own keys, trade with leverage, buy with a card — one app.">
+<link rel="icon" href="assets/favicon.png">
+<meta property="og:title" content="Arbiter — Arbitrum wallet with perps built in">
+<meta property="og:description" content="A self-custody Arbitrum wallet with Hyperliquid perpetuals built in. Your keys, your positions.">
+<meta property="og:image" content="https://arbiter.xyz/assets/og.png">
+<meta property="og:url" content="https://arbiter.xyz/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#08090C">
+<style>
+  :root{
+    --bg:#08090C; --surface:#111319; --surface-2:#171A22; --line:#22262F;
+    --text:#E9EDF3; --muted:#828C9E;
+    --blue:#3D82E8; --blue-deep:#1D4C8C; --navy:#06203F;
+    --green:#00C076; --red:#FF4D6A;
+    --max:1120px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Roboto,sans-serif;
+    line-height:1.55; overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+  /* ── nav ─────────────────────────────────────────────────────────── */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+      background:rgba(8,9,12,.72);border-bottom:1px solid transparent;transition:border-color .2s}
+  nav.scrolled{border-bottom-color:var(--line)}
+  .nav-in{display:flex;align-items:center;gap:12px;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.3px;font-size:18px}
+  .brand img{width:30px;height:30px;border-radius:8px}
+  .nav-links{margin-left:auto;display:flex;gap:28px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:14.5px;font-weight:500;transition:color .15s}
+  .nav-links a:hover{color:var(--text)}
+  @media(max-width:640px){.nav-links a:not(.btn-sm){display:none}}
+  .btn-sm{background:var(--text);color:#000!important;padding:8px 16px;border-radius:999px;
+          font-weight:600;font-size:14px}
+
+  /* ── hero ────────────────────────────────────────────────────────── */
+  .hero{position:relative;padding:86px 0 40px;overflow:hidden}
+  .glow{position:absolute;inset:0;pointer-events:none;z-index:0}
+  .glow::before,.glow::after{content:"";position:absolute;border-radius:50%;filter:blur(90px)}
+  .glow::before{width:620px;height:620px;left:-160px;top:-220px;
+                background:radial-gradient(circle,rgba(61,130,232,.30),transparent 65%)}
+  .glow::after{width:540px;height:540px;right:-140px;top:60px;
+               background:radial-gradient(circle,rgba(0,192,118,.20),transparent 65%)}
+  .hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;
+           gap:52px;align-items:center}
+  @media(max-width:900px){.hero-in{grid-template-columns:1fr;gap:44px}}
+
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);
+        background:var(--surface);border-radius:999px;padding:6px 14px;font-size:13px;
+        color:var(--muted);margin-bottom:24px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+       box-shadow:0 0 0 3px rgba(0,192,118,.18)}
+  h1{font-size:clamp(42px,6vw,68px);line-height:1.03;letter-spacing:-2.4px;font-weight:800}
+  h1 .grad{background:linear-gradient(100deg,var(--blue),var(--green));
+           -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:clamp(16px,2vw,19px);margin-top:20px;max-width:30em}
+  .cta{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+  .btn{padding:13px 24px;border-radius:12px;font-weight:650;font-size:15px;
+       transition:transform .15s,box-shadow .15s,background .15s;display:inline-flex;
+       align-items:center;gap:9px}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-p{background:var(--text);color:#000;box-shadow:0 8px 26px rgba(233,237,243,.13)}
+  .btn-s{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+  .btn-s:hover{background:var(--surface-2)}
+  .note{color:var(--muted);font-size:13px;margin-top:16px}
+
+  /* ── phones ──────────────────────────────────────────────────────── */
+  .phones{position:relative;height:540px}
+  @media(max-width:900px){.phones{height:470px}}
+  .phone{position:absolute;border-radius:34px;overflow:hidden;background:#000;
+         border:1px solid #23262E;
+         box-shadow:0 34px 70px rgba(0,0,0,.66),0 0 0 1px rgba(255,255,255,.05) inset}
+  .phone img{display:block;width:100%;height:auto}
+  .p-back{width:220px;right:44%;top:38px;transform:rotate(-6deg);opacity:.92}
+  .p-front{width:250px;right:2%;top:0}
+  @media(max-width:900px){.p-back{right:52%;width:200px}.p-front{right:8%;width:228px}}
+  @media(max-width:460px){.p-back{display:none}.p-front{right:50%;transform:translateX(50%)}}
+
+  /* ── sections ────────────────────────────────────────────────────── */
+  section{padding:88px 0;scroll-margin-top:66px}
+  @media(max-width:640px){section{padding:64px 0}}
+  .eyebrow{color:var(--green);font-size:13px;font-weight:700;letter-spacing:1.4px;
+           text-transform:uppercase;margin-bottom:14px}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-1.2px;line-height:1.12;font-weight:750}
+  .lede{color:var(--muted);margin-top:14px;max-width:36em;font-size:17px}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;
+        padding:26px 24px;transition:border-color .2s,transform .2s,background .2s}
+  .card:hover{border-color:#2E3543;transform:translateY(-2px);background:var(--surface-2)}
+  .ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;
+      justify-content:center;margin-bottom:16px;font-size:19px}
+  .ic-b{background:rgba(61,130,232,.14)} .ic-g{background:rgba(0,192,118,.14)}
+  .ic-r{background:rgba(255,77,106,.13)}
+  .card h3{font-size:17.5px;font-weight:680;letter-spacing:-.3px;margin-bottom:8px}
+  .card p{color:var(--muted);font-size:14.5px;line-height:1.62}
+
+  /* ── split ───────────────────────────────────────────────────────── */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  @media(max-width:860px){.split{grid-template-columns:1fr;gap:40px}}
+  .shot-col{position:relative;justify-self:center}
+  .shot{border-radius:26px;overflow:hidden;border:1px solid #23262E;background:#000;
+        box-shadow:0 30px 60px rgba(0,0,0,.6);width:290px;max-width:100%}
+  .shot img{display:block;width:100%;height:auto}
+
+  /* floating position card, recreated from the app */
+  .pos{position:absolute;left:-90px;bottom:44px;width:276px;z-index:2;
+       background:rgba(20,23,30,.94);backdrop-filter:blur(12px);
+       border:1px solid #2A303C;border-left:3px solid var(--green);
+       border-radius:16px;padding:15px 16px;
+       box-shadow:0 26px 54px rgba(0,0,0,.72)}
+  @media(max-width:1040px){.pos{left:-56px}}
+  @media(max-width:520px){.pos{position:static;width:290px;max-width:100%;margin:18px auto 0}}
+  .pos-top{display:flex;align-items:center;gap:8px}
+  .pos-sym{font-weight:750;font-size:16px;letter-spacing:-.3px}
+  .tag{font-size:10.5px;font-weight:700;letter-spacing:.5px;padding:2.5px 7px;border-radius:6px;
+       background:rgba(0,192,118,.16);color:var(--green)}
+  .lev{color:var(--muted);font-size:13px}
+  .pos-pnl{margin-left:auto;text-align:right;line-height:1.25}
+  .pos-pnl .a{color:var(--green);font-weight:730;font-size:15.5px}
+  .pos-pnl .b{color:var(--green);font-size:12px;opacity:.85}
+  .pos-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px;
+           padding-top:12px;border-top:1px solid #262B36}
+  .pos-row .k{color:var(--muted);font-size:10.5px;letter-spacing:.2px}
+  .pos-row .v{font-size:12.5px;font-weight:600;margin-top:2px;
+              font-variant-numeric:tabular-nums}
+  .guards{display:flex;gap:7px;margin-top:13px}
+  .guard{font-size:11px;font-weight:640;padding:4px 9px;border-radius:7px;
+         font-variant-numeric:tabular-nums}
+  .guard.tp{background:rgba(0,192,118,.13);color:var(--green)}
+  .guard.sl{background:rgba(255,77,106,.13);color:var(--red)}
+  ul.checks{list-style:none;margin-top:26px;display:grid;gap:14px}
+  ul.checks li{display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:15.5px}
+  ul.checks b{color:var(--text);font-weight:620}
+  .tick{color:var(--green);flex:none;font-weight:800}
+
+  /* ── strip ───────────────────────────────────────────────────────── */
+  .strip{border-block:1px solid var(--line);background:
+    linear-gradient(180deg,rgba(29,76,140,.10),transparent)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center}
+  @media(max-width:640px){.stats{grid-template-columns:1fr;gap:30px}}
+  .stat .n{font-size:34px;font-weight:780;letter-spacing:-1.2px}
+  .stat .l{color:var(--muted);font-size:14px;margin-top:4px}
+
+  /* ── download ────────────────────────────────────────────────────── */
+  .dl{text-align:center;position:relative;overflow:hidden}
+  .dl .glow::before{left:50%;transform:translateX(-50%);top:-260px;width:760px;height:560px}
+  .dl .glow::after{display:none}
+  .dl-in{position:relative;z-index:1}
+  .dl .cta{justify-content:center}
+
+  /* ── footer ──────────────────────────────────────────────────────── */
+  footer{border-top:1px solid var(--line);padding:44px 0 56px;color:var(--muted);font-size:14px}
+  .f-in{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+  .f-links{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
+  .f-links a:hover{color:var(--text)}
+  .disclaimer{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);
+              font-size:12.5px;line-height:1.7;max-width:75ch}
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="wrap nav-in">
+  <a class="brand" href="/"><img src="assets/logo.png" alt="">Arbiter</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#trading">Trading</a>
+    <a href="terms.html">Terms</a>
+    <a class="btn-sm" href="#download">Get the app</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="glow"></div><div class="wrap hero-in">
+  <div>
+    <span class="pill"><span class="dot"></span> Arbitrum · Hyperliquid perps</span>
+    <h1>Your wallet.<br>Your keys.<br><span class="grad">Your positions.</span></h1>
+    <p class="sub">
+      Arbiter is a self-custody Arbitrum wallet with Hyperliquid perpetuals built
+      straight in. Hold USDC, open a leveraged position, set a stop — without
+      handing your funds to an exchange.
+    </p>
+    <div class="cta">
+      <a class="btn btn-p" href="#download">Get the app</a>
+      <a class="btn btn-s" href="#trading">See how it works</a>
+    </div>
+    <p class="note">Non-custodial · Arbitrum only · Built by Cake Labs</p>
+  </div>
+  <div class="phones">
+    <div class="phone p-back"><img src="assets/shot-trade.png" alt="Arbiter trading screen showing a BTC perpetual chart and order entry"></div>
+    <div class="phone p-front"><img src="assets/shot-wallet.png" alt="Arbiter home screen showing wallet and trading balances"></div>
+  </div>
+</div></header>
+
+<section id="features"><div class="wrap">
+  <p class="eyebrow">Why Arbiter</p>
+  <h2>A wallet that trades.</h2>
+  <p class="lede">
+    Most wallets stop at holding. Most exchanges want custody. Arbiter does both
+    ends properly — your keys never leave the device, and the order book is one
+    tap from your balance.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="ic ic-b">🔑</div>
+      <h3>You hold the keys</h3>
+      <p>Your seed is generated on device and never leaves it. No account, no
+         email, no custodian standing between you and your funds.</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-g">📈</div>
+      <h3>Perps, natively</h3>
+      <p>Long or short with leverage on Hyperliquid's order book. Market, limit,
+         stop-loss, take-profit and stop-limit, all signed locally.</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-b">🛡️</div>
+      <h3>Protect a position</h3>
+      <p>Attach a take-profit and a stop-loss to any open position in two taps,
+         or close it at market. Positions show at a glance what's guarding them.</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-g">💳</div>
+      <h3>Buy with a card</h3>
+      <p>Fund your wallet with USDC or ETH on Arbitrum directly from the app,
+         through regulated on-ramp partners.</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-b">🔁</div>
+      <h3>Swap across chains</h3>
+      <p>Move between assets through several exchange providers at once, and
+         take whichever quote is best at the moment you trade.</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-r">⚡</div>
+      <h3>One balance, one app</h3>
+      <p>Wallet balance and trading balance side by side. Deposit to Hyperliquid
+         and withdraw back without leaving Arbiter.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="trading" class="strip"><div class="wrap split">
+  <div>
+    <p class="eyebrow">Trading</p>
+    <h2>Built for the position, not the pitch.</h2>
+    <p class="lede">
+      The trading side is a real client, not a widget. Live order book, candles
+      across four timeframes, and every order type Hyperliquid supports.
+    </p>
+    <ul class="checks">
+      <li><span class="tick">✓</span><span><b>Up to 40× leverage</b> depending on the market, set per position.</span></li>
+      <li><span class="tick">✓</span><span><b>Take-profit and stop-loss</b> attached to the position, sized to close it in full.</span></li>
+      <li><span class="tick">✓</span><span><b>Signed on your device.</b> Orders are EIP-712 signed locally and sent straight to Hyperliquid.</span></li>
+      <li><span class="tick">✓</span><span><b>Your history stays yours.</b> Fills, deposits and withdrawals, read from the chain.</span></li>
+    </ul>
+  </div>
+  <div class="shot-col">
+    <div class="shot"><img src="assets/shot-trade.png" alt="Arbiter trade screen with candlestick chart, order types and leverage control"></div>
+    <div class="pos" aria-hidden="true">
+      <div class="pos-top">
+        <span class="pos-sym">BTC</span><span class="tag">LONG</span><span class="lev">10×</span>
+        <span class="pos-pnl"><div class="a">+$42.18</div><div class="b">+2.31%</div></span>
+      </div>
+      <div class="pos-row">
+        <div><div class="k">Size</div><div class="v">0.0290</div></div>
+        <div><div class="k">Entry</div><div class="v">64,015</div></div>
+        <div><div class="k">Mark</div><div class="v">65,469</div></div>
+        <div><div class="k">Liq</div><div class="v">58,102</div></div>
+      </div>
+      <div class="guards">
+        <span class="guard tp">TP 71,400</span>
+        <span class="guard sl">SL 62,800</span>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap stats">
+  <div class="stat"><div class="n">0</div><div class="l">accounts to create</div></div>
+  <div class="stat"><div class="n">40×</div><div class="l">maximum leverage</div></div>
+  <div class="stat"><div class="n">0.01%</div><div class="l">our fee per trade</div></div>
+</div></section>
+
+<section id="download" class="dl"><div class="glow"></div><div class="wrap dl-in">
+  <p class="eyebrow">Get started</p>
+  <h2>Arbiter is in closed testing.</h2>
+  <p class="lede" style="margin-inline:auto">
+    We're rolling out to a small group first. Add your email and we'll send an
+    invite as places open up.
+  </p>
+  <div class="cta">
+    <a class="btn btn-p" href="mailto:hello@arbiter.xyz?subject=Arbiter%20test%20invite">Request an invite</a>
+    <a class="btn btn-s" href="terms.html">Read the terms</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="f-in">
+    <a class="brand" href="/"><img src="assets/logo.png" alt="">Arbiter</a>
+    <div class="f-links">
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="https://cakewallet.com" rel="noopener">Cake Labs</a>
+      <a href="mailto:hello@arbiter.xyz">Contact</a>
+    </div>
+  </div>
+  <p class="disclaimer">
+    Arbiter is a self-custody wallet. You hold your own keys, and no one else can
+    recover them for you — including us. Trading perpetual futures carries
+    substantial risk, including the total loss of your margin; leverage magnifies
+    losses as well as gains. Arbiter charges a 0.01% builder fee on trade value,
+    collected by Hyperliquid and paid to Arbiter, on top of Hyperliquid's own
+    fees — see the <a href="terms.html" style="color:var(--muted);text-decoration:underline">terms</a>.
+    Nothing here is financial advice. Arbiter is not available where its use
+    would breach local law.
+    <br><br>© 2026 Cake Labs. Built on <a href="https://github.com/cake-tech/cake_wallet" rel="noopener" style="color:var(--muted);text-decoration:underline">Cake Wallet</a>.
+  </p>
+</div></footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); addEventListener('scroll', onScroll, {passive:true});
+</script>
+</body>
+</html>
