@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arbiter</title>
+<meta name="theme-color" content="#08090C">
+<link rel="icon" href="/assets/favicon.png">
+<style>
+  :root{--bg:#08090C;--surface:#111319;--line:#22262F;--text:#E9EDF3;--muted:#828C9E;--blue:#3D82E8;--green:#00C076}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
+       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Roboto,sans-serif;
+       line-height:1.55;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 20px;text-align:center}
+  h1{font-size:26px;letter-spacing:-.02em;margin-bottom:10px}
+  p{color:var(--muted);font-size:15px;max-width:420px}
+  .btn{display:inline-block;margin-top:22px;padding:14px 24px;border-radius:999px;
+       background:var(--text);color:#000;font-weight:600;text-decoration:none}
+</style>
+<script>
+  // Static hosting has no router, so a referral link like /r/CODE lands
+  // here. Recover the code and hand it to the invite page before anything
+  // paints — replace(), not assign(), so Back doesn't bounce through this.
+  (function () {
+    var parts = location.pathname.split('/').filter(Boolean);
+    if (parts.length >= 2 && parts[0].toLowerCase() === 'r') {
+      var code = parts[1].toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+      if (code.length >= 3) {
+        location.replace('/r/?c=' + encodeURIComponent(code));
+      }
+    }
+  })();
+</script>
+</head>
+<body>
+  <div>
+    <h1>Page not found</h1>
+    <p>That link doesn't lead anywhere on arbiter.xyz. If someone sent you an invite, ask them to share it again — a referral link looks like arbiter.xyz/r/THEIRCODE.</p>
+    <a class="btn" href="/">Go to arbiter.xyz</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You've been invited to Arbiter</title>
+<meta name="description" content="Join Arbiter with a friend's referral code and get a discount on Hyperliquid trading fees.">
+<meta name="theme-color" content="#08090C">
+<meta property="og:title" content="You've been invited to Arbiter">
+<meta property="og:description" content="A self-custody Arbitrum wallet with Hyperliquid perpetuals built in. Join with a code for a fee discount.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.png">
+<meta property="og:image" content="https://arbiter.xyz/assets/og.png">
+<style>
+  :root{
+    --bg:#08090C; --surface:#111319; --surface-2:#171A22; --line:#22262F;
+    --text:#E9EDF3; --muted:#828C9E;
+    --blue:#3D82E8; --green:#00C076;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Inter,Roboto,sans-serif;
+    line-height:1.55; min-height:100vh; display:flex; align-items:center;
+    justify-content:center; padding:28px 20px;
+  }
+  .card{width:100%; max-width:420px; text-align:center}
+  .logo{width:56px;height:56px;border-radius:15px;margin:0 auto 22px;display:block}
+  h1{font-size:26px;line-height:1.25;letter-spacing:-.02em;margin-bottom:10px}
+  h1 .grad{background:linear-gradient(100deg,var(--blue),var(--green));
+           -webkit-background-clip:text;background-clip:text;color:transparent}
+  p{color:var(--muted);font-size:15px}
+  .code-wrap{margin:24px 0 8px}
+  .code-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .code{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:16px;font-size:26px;font-weight:700;letter-spacing:.16em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;
+  }
+  .code:active{background:var(--surface-2)}
+  .copy-hint{font-size:12px;color:var(--muted);margin-top:8px;height:16px}
+  .btns{display:flex;flex-direction:column;gap:10px;margin-top:26px}
+  .btn{display:block;padding:15px 20px;border-radius:999px;font-size:16px;
+       font-weight:600;text-decoration:none;transition:opacity .15s}
+  .btn:active{opacity:.85}
+  .btn-p{background:var(--text);color:#000}
+  .btn-s{background:var(--surface);color:var(--text);border:1px solid var(--line)}
+  .steps{
+    margin-top:28px;text-align:left;background:var(--surface);border:1px solid var(--line);
+    border-radius:16px;padding:18px 20px;
+  }
+  .steps h2{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+            font-weight:600;margin-bottom:12px}
+  .steps ol{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+  .steps li{margin-bottom:7px}
+  .steps li:last-child{margin-bottom:0}
+  .steps b{color:var(--text);font-weight:600}
+  .foot{margin-top:26px;font-size:12.5px;color:var(--muted)}
+  .foot a{color:var(--muted)}
+  .bad{display:none}
+  body.no-code .has-code{display:none}
+  body.no-code .bad{display:block}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="/assets/logo.png" alt="Arbiter" class="logo" onerror="this.style.display='none'">
+
+  <div class="has-code">
+    <h1>You've been invited to <span class="grad">Arbiter</span></h1>
+    <p>A self-custody Arbitrum wallet with perpetuals built in. Join with this code and you get a discount on Hyperliquid's trading fees.</p>
+
+    <div class="code-wrap">
+      <div class="code-label">Your referral code</div>
+      <div class="code" id="code" title="Tap to copy">…</div>
+      <div class="copy-hint" id="hint">Tap the code to copy it</div>
+    </div>
+
+    <div class="btns">
+      <a class="btn btn-p" id="open" href="#">Open in Arbiter</a>
+      <a class="btn btn-s" href="https://testflight.apple.com/join/DfR1PW24">Get it on iPhone</a>
+      <a class="btn btn-s" href="https://play.google.com/apps/testing/com.cakewallet.arbiter">Get it on Android</a>
+    </div>
+
+    <div class="steps">
+      <h2>If you're installing for the first time</h2>
+      <ol>
+        <li>Install Arbiter and create or restore a wallet.</li>
+        <li>Open <b>Rewards</b> — the gift icon on the home screen.</li>
+        <li>Tap <b>Have a friend's code?</b> and enter the code above.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="bad">
+    <h1>That invite link looks incomplete</h1>
+    <p>A referral link ends with a code, like <b>arbiter.xyz/r/YOURCODE</b>. Ask your friend to send theirs again — or head to the site and get the app anyway.</p>
+    <div class="btns">
+      <a class="btn btn-p" href="https://arbiter.xyz">Go to arbiter.xyz</a>
+    </div>
+  </div>
+
+  <div class="foot"><a href="https://arbiter.xyz">arbiter.xyz</a> · Arbiter is self-custody: your keys stay on your device.</div>
+</div>
+
+<script>
+  // The code can arrive two ways. Pretty paths (/r/CODE) are served by
+  // 404.html on static hosting, which forwards here with ?c=; the query
+  // form works directly. Both end up in the same place.
+  function readCode() {
+    const q = new URLSearchParams(location.search).get('c');
+    if (q) return q;
+    const parts = location.pathname.split('/').filter(Boolean);
+    const i = parts.indexOf('r');
+    return (i >= 0 && parts[i + 1]) ? parts[i + 1] : null;
+  }
+
+  const raw = readCode();
+  const code = raw ? raw.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12) : '';
+
+  if (!code || code.length < 3) {
+    document.body.classList.add('no-code');
+  } else {
+    document.getElementById('code').textContent = code;
+    // The app registers the arbiter:// scheme on both platforms, so this
+    // opens it directly when installed. Nothing happens when it isn't —
+    // hence the store buttons and the manual-entry steps below.
+    document.getElementById('open').href = 'arbiter://r/' + code;
+
+    document.getElementById('code').addEventListener('click', async () => {
+      const hint = document.getElementById('hint');
+      try {
+        await navigator.clipboard.writeText(code);
+        hint.textContent = 'Copied';
+      } catch (e) {
+        hint.textContent = 'Select and copy the code above';
+      }
+      setTimeout(() => { hint.textContent = 'Tap the code to copy it'; }, 2200);
+    });
+  }
+</script>
+</body>
+</html>
