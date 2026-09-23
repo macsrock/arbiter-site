@@ -17,22 +17,72 @@
 
 <header class="page"><div class="wrap">
   <h1>Privacy Policy</h1>
-  <p class="upd">Last updated 12 August 2026</p>
+  <p class="upd">Last updated 23 September 2026</p>
 </div></header>
 
 <main><div class="wrap">
 
 <div class="callout">
-  <p><strong>The short version.</strong> Arbiter has no accounts and no servers of
-  ours holding your data. Your keys, seed phrase and PIN never leave your device.
-  But the app does talk to third parties to work — and your wallet address goes
-  to them.</p>
+  <p><strong>The short version.</strong> Arbiter has no accounts: no sign-up, no
+  email, no password. Your keys, seed phrase and PIN never leave your device. A
+  few features run on servers we operate, and those keep your wallet address
+  together with what the feature needs — section 1 lists each one and how long
+  it is kept. The app also talks to third parties to work, and your wallet
+  address goes to them.</p>
 </div>
 
 <h2>1. What we collect</h2>
-<p><strong>We do not operate a backend that stores your personal data.</strong>
-There is no sign-up, no email required, no password, and no profile. We do not
-ask for your name, address or identity documents.</p>
+<p>There is no sign-up, no email required, no password, and no profile. We do not
+ask for your name, postal address or identity documents.</p>
+<p>Some features run on servers we operate (hosted by Cloudflare). They are
+identified by your <strong>wallet address</strong>, never by your name or
+device identity, and each keeps only what it needs:</p>
+
+<h3>Usernames and leaderboards (optional)</h3>
+<p>If you claim a username we store it with your wallet address, the time you
+claimed or changed it, and the message you signed to claim it (which records
+that you confirmed you are an adult). If you give a name up, it is held for your
+wallet for 90 days so no one else can take it straight away.</p>
+<p>If you join a leaderboard:</p>
+<ul>
+  <li><strong>Live trading board:</strong> every hour our server reads your
+      account from Hyperliquid's public record and stores your 7- and 30-day
+      return, account value and 30-day trading volume.</li>
+  <li><strong>Practice board:</strong> the app sends your practice results — the
+      practice balance, 7- and 30-day gain, number of trades and trading days,
+      and worst drop. We keep each report for 90 days so results can be checked
+      before any prize is awarded.</li>
+</ul>
+<p>Leaving a board deletes the figures stored for it. Deleting your username
+takes you off both boards and deletes those figures too.</p>
+
+<h3>Notifications and price alerts (optional)</h3>
+<p>If you turn notifications on, we store your wallet address, your device's
+push token (issued by Apple or Google), which notifications you chose, the price
+alerts you set, and a list of your last 100 notifications (which include
+amounts and prices, for the in-app list). Our server reads your Hyperliquid and
+Arbitrum activity to know when to notify you. Turning notifications off in
+Settings deletes all of it.</p>
+
+<h3>Gas-free transactions</h3>
+<p>When the app pays network fees for you — deposits, sends, USDC swaps and
+cross-chain USDC — the transaction you signed passes through our relay server,
+which records its progress (your address, the amount and transaction hashes)
+for 1 to 30 days depending on the kind of transaction. We also keep a short
+record of which of these features a wallet has used and when it last used them,
+for 12 months after its last use. Gift and reward claims are recorded against
+the wallet that claimed them.</p>
+
+<h3>Position Radar</h3>
+<p>Opening Position Radar adds your wallet address to the list of Hyperliquid
+accounts it follows, so your rank can be shown. Your address is removed 90 days
+after you last open it. Radar only reads positions that are already public on
+Hyperliquid.</p>
+
+<h3>What our servers do not keep</h3>
+<p>Your IP address is used only to limit how often requests can be made and is
+discarded within two minutes. We do not keep request logs, and we never receive
+your seed phrase, private keys or PIN.</p>
 
 <h2>2. What stays on your device</h2>
 <ul>
@@ -43,6 +93,9 @@ ask for your name, address or identity documents.</p>
       tokens you show.</li>
   <li>A local <strong>cache of balances and transaction history</strong> read from
       public blockchain data.</li>
+  <li>Your <strong>practice (paper trading) account</strong> — its balance,
+      orders and history. Only the practice results you choose to send to the
+      practice leaderboard leave the device.</li>
 </ul>
 <p>Uninstalling the app deletes all of it. Because it never leaves the device, we
 cannot recover any of it for you.</p>
@@ -69,7 +122,18 @@ information does not pass through Arbiter and we never see it.</p>
 <h3>Exchange providers</h3>
 <p>When you swap, the providers we query receive the <strong>pair, the amount, and
 the destination address</strong> in order to quote and settle. Different providers
-apply different identity requirements; some ask for none.</p>
+apply different identity requirements; some ask for none. Swaps routed through
+<strong>LI.FI</strong> also send your wallet address as the sender, and the swap
+itself is carried out by LI.FI's contracts on the blockchain.</p>
+
+<h3>Circle</h3>
+<p>Moving USDC between blockchains uses Circle's cross-chain transfer service,
+which receives the transaction details needed to complete the transfer.</p>
+
+<h3>Apple and Google</h3>
+<p>If you turn notifications on, your device's push token is used to deliver
+them through Apple's or Google's push service. The notification itself carries
+no amounts — it asks you to open the app for the details.</p>
 
 <h3>Blockchain nodes</h3>
 <p>Reading your balance and broadcasting transactions means sending your
@@ -91,6 +155,11 @@ seed phrase.</p>
 transactions, open positions and trading history are visible to anyone who looks,
 permanently, whether or not you use Arbiter. This is a property of the
 blockchain, not of this app.</p>
+<p>If you claim a username and join a leaderboard, your <strong>username, rank
+and percentage results</strong> are shown to every Arbiter user (on the practice
+board, also your number of trades, trading days and worst drop). Leaderboards
+never show your wallet address or dollar amounts. A username you put on a share
+card is visible to whoever you share it with.</p>
 
 <h2>6. Children</h2>
 <p>Arbiter is not intended for anyone under the age of majority in their
@@ -103,6 +172,11 @@ jurisdiction, and we do not knowingly collect information from them.</p>
   <li>Don't want Hyperliquid to have your address? Use Arbiter as a wallet only
       and don't deposit to trading.</li>
   <li>Prefer a different node? Change it in <strong>Settings → Nodes</strong>.</li>
+  <li>Don't want a username or a place on a leaderboard? Don't claim one — or
+      leave the board or delete the name in <strong>Settings → Trading account
+      settings</strong>, which deletes what we stored for it.</li>
+  <li>Don't want notifications stored? Leave them off, or turn them off in
+      <strong>Settings → Trading account settings → Notifications</strong>.</li>
   <li>Want everything gone? Uninstall. Save your seed phrase first — it is the
       only way back to your funds.</li>
 </ul>
